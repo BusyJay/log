@@ -710,8 +710,8 @@ impl LevelFilter {
 pub struct Record<'a> {
     metadata: Metadata<'a>,
     args: fmt::Arguments<'a>,
-    module_path: Option<&'a str>,
-    file: Option<&'a str>,
+    module_path: Option<&'static str>,
+    file: Option<&'static str>,
     line: Option<u32>,
 }
 
@@ -748,13 +748,13 @@ impl<'a> Record<'a> {
 
     /// The module path of the message.
     #[inline]
-    pub fn module_path(&self) -> Option<&'a str> {
+    pub fn module_path(&self) -> Option<&'static str> {
         self.module_path
     }
 
     /// The source file containing the message.
     #[inline]
-    pub fn file(&self) -> Option<&'a str> {
+    pub fn file(&self) -> Option<&'static str> {
         self.file
     }
 
@@ -866,14 +866,14 @@ impl<'a> RecordBuilder<'a> {
 
     /// Set [`module_path`](struct.Record.html#method.module_path)
     #[inline]
-    pub fn module_path(&mut self, path: Option<&'a str>) -> &mut RecordBuilder<'a> {
+    pub fn module_path(&mut self, path: Option<&'static str>) -> &mut RecordBuilder<'a> {
         self.record.module_path = path;
         self
     }
 
     /// Set [`file`](struct.Record.html#method.file)
     #[inline]
-    pub fn file(&mut self, file: Option<&'a str>) -> &mut RecordBuilder<'a> {
+    pub fn file(&mut self, file: Option<&'static str>) -> &mut RecordBuilder<'a> {
         self.record.file = file;
         self
     }
@@ -1227,7 +1227,7 @@ pub fn logger() -> &'static Log {
 pub fn __private_api_log(
     args: fmt::Arguments,
     level: Level,
-    &(target, module_path, file, line): &(&str, &str, &str, u32),
+    &(target, module_path, file, line): &(&str, &'static str, &'static str, u32),
 ) {
     logger().log(
         &Record::builder()
